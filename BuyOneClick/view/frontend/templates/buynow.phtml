@@ -1,0 +1,122 @@
+<?php /** @var \Magento\Catalog\Block\Product\View $block */ ?>
+<style type="text/css">
+    .modal-popup .modal-inner-wrap{
+        width: 500px;
+    }
+    .primary_decline{
+        color: #4e4c4c;
+        background: white;
+        height: 50px;
+        width: 450px;
+        border: 0;
+        padding: 0;
+    }
+    .primary_decline:hover{
+        color: #4e4c4c;
+        background: white;
+        border: 0;
+        padding: 0;
+    }
+    .primary_accept {
+        color: white;
+        background: #d03030;
+        height: 50px;
+        width: 450px;
+        border: 0;
+        padding: 0;
+        position: relative;
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
+    .primary_accept:hover {
+        color: white;
+        background: #bb0000;
+        border: 0;
+        padding: 0;
+    }
+</style>
+<?php if ($this->helper(\Perspective\BuyOneClick\Helper\Data::class)->getGeneralConfig('enable')): ?>
+<div class="buynow" id="buynow">
+    <button class="action primary tocart" type="button" id="buynow">Купити в 1 клік
+    </button>
+</div>
+<div id="modal" style="display:none;" data-mage-init='{"loader": { "icon": "{store URL}/static/{static version}/frontend/Magento/luma/en_US/images/loader-2.gif"}}'>
+    <form id="buy_now_form" >
+        <fieldset class="fieldset">
+            <h4 style="text-align: center">Введіть свій номер телефону, і ми зв'яжемось з вами, щоб прояснити деталі вашого замовлення</h4>
+            <label for="name">Ім'я</label><input id="name" type="text" placeholder="Введіть своє ім'я"/>
+            <label for="name">Прізвище</label><input id="firstname" type="text" placeholder="Введіть своє прізвище"/>
+            <div class="field emailaddress required">
+                <label class="label" for="emailaddress"><span>E-mail</span></label>
+                <div class="control">
+                    <input name="emailaddress" id="email" title="E-mail"
+                           data-validate="{required:true, 'validate-email':true}" class="input-text" type="email"
+                           placeholder="example@example.com"/>
+                </div>
+            </div>
+            <label for="number"><?=__('Номер телефону')?></label><input id="number" type="number" maxlength="13" placeholder="+380"/>
+        </fieldset>
+    </form>
+</div>
+<script type="text/javascript">
+    require(
+        [
+            'jquery',
+            'Magento_Ui/js/modal/modal',
+            'loader'
+        ],
+        function(
+            $,
+            modal
+        ) {
+            var options = {
+                type: 'popup',
+                title: "<div style='text-align: center'>Купити в 1 клік</div>",
+                buttons: [
+                    {
+                        text: $.mage.__("Підтвердити"),
+                        class: 'primary_accept',
+                        click: function () {
+                            let name = $("#name").val();
+                            let firstname = $("#firstname").val();
+                            let email = $("#email").val();
+                            let number = $("#number").val();
+                            let qty = $("#qty").val();
+                            let array = $('#product_addtocart_form').serializeArray();
+                            let sku = $('.value').html();
+                            if (!email){
+                                alert('Введіть будь ласка пошту!')
+                            }else {
+
+                                $.ajax({
+                                    url: "http://study.loc/oneclick/order/oneclick",
+                                    type: "POST",
+                                    showLoader: true,
+                                    data: {
+                                        "name": name,
+                                        "firstname": firstname,
+                                        "email": email,
+                                        "number": number,
+                                        "qty": qty,
+                                        "sku": sku,
+                                        "array": array,
+                                    },
+                                });
+                                this.closeModal();
+                            }
+                        }
+                    },
+                    {
+                    text: $.mage.__("<div style='text-align: center'>Відмінити </div>"),
+                    class: 'primary_decline',
+                }
+                ]
+            };
+            var popup = modal(options, $('#modal'));
+            $("#buynow").on('click',function(){
+                $("#modal").modal("openModal");
+            });
+        }
+    );
+</script>
+<?php endif; ?>
