@@ -139,14 +139,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                 $quote->addProduct($product, $item['qty']);
             }
         }
-        $lastOrder = $this->getOrders();
-        if (!empty($lastOrder->getData())) {
-            $shipingMethod = $lastOrder->getData('shipping_method');
-            $paymentMethod = $lastOrder->getPayment()->getMethod();
-        } else {
-            $shipingMethod = $this->getGeneralConfig('shiping');
-            $paymentMethod = $this->getGeneralConfig('payment');
-        }
+        $shipingMethod = $this->getGeneralConfig('shiping');
+        $paymentMethod = $this->getGeneralConfig('payment');
         $quote->getBillingAddress()->addData($orderInfo['address']);
         $quote->getShippingAddress()->addData($orderInfo['address']);
         $shippingAddress = $quote->getShippingAddress();

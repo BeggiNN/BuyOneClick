@@ -45,7 +45,6 @@
         <fieldset class="fieldset">
             <h4 style="text-align: center">Введіть свій номер телефону, і ми зв'яжемось з вами, щоб прояснити деталі вашого замовлення</h4>
             <label for="name">Ім'я</label><input id="name" type="text" placeholder="Введіть своє ім'я"/>
-            <label for="name">Прізвище</label><input id="firstname" type="text" placeholder="Введіть своє прізвище"/>
             <div class="field emailaddress required">
                 <label class="label" for="emailaddress"><span>E-mail</span></label>
                 <div class="control">
@@ -78,7 +77,6 @@
                         class: 'primary_accept',
                         click: function () {
                             let name = $("#name").val();
-                            let firstname = $("#firstname").val();
                             let email = $("#email").val();
                             let number = $("#number").val();
                             let qty = $("#qty").val();
@@ -94,7 +92,6 @@
                                     showLoader: true,
                                     data: {
                                         "name": name,
-                                        "firstname": firstname,
                                         "email": email,
                                         "number": number,
                                         "qty": qty,
